@@ -83,6 +83,13 @@ const authOptions: NextAuthOptions = {
 
       return session;
     },
+
+    redirect: async ({ url, baseUrl }) => {
+      // Allow only relative URLs or URLs starting with baseUrl for security
+      if (url.startsWith(baseUrl)) return url;
+      if (url.startsWith("/")) return baseUrl + url;
+      return baseUrl;
+    },
   },
 };
 

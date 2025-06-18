@@ -38,6 +38,26 @@ This means that you are now working in your isolated development environment. Yo
 
 ## Getting Started
 
+### Environment variables
+
+There is an encrypted `env.development.enc` file in the root of the repo that was created using the command:
+
+```bash
+openssl aes-256-cbc -pbkdf2 -salt -in .env.development -out .env.development.enc
+```
+
+You will first need to decrypt the file to get the environment variables. Run the following command to decrypt:
+
+```bash
+openssl aes-256-cbc -d -pbkdf2 -in .env.development.enc -out .env.development
+```
+
+Ask for the decryption key from any team member.
+
+Once decrypted, modify any variable value if needed.
+
+### Build and run
+
 The following commands should be run from the integrated Terminal inside the VS Code session that is connected to the Dev Container.
 
 To run the web app

@@ -18,7 +18,6 @@ const authOptions: NextAuthOptions = {
   },
   callbacks: {
     signIn: async ({ user, account, profile }) => {
-      console.log({ user, account, profile });
       if (
         account?.provider === "google" &&
         account.access_token &&
@@ -40,11 +39,18 @@ const authOptions: NextAuthOptions = {
 
           // Attach API tokens and user info to the user object for jwt callback
           (user as AuthUser).apiUser = {
-            email: data.email,
-            first_name: data.first_name,
-            access_token: data.access_token,
-            refresh_token: data.refresh_token,
-            expires_in: data.expires_in,
+            user_id: data.user.id,
+            email: data.user.email,
+            first_name: data.user.first_name,
+          };
+
+          const tokenExpiresAt =
+            Date.now() + ((data.expires_in as number) - 2 * 60) * 1000; // 2 minutes buffer
+
+          (user as AuthUser).apiTokenInfo = {
+            apiAccessToken: data.access_token,
+            apiRefreshToken: data.refresh_token,
+            apiAccessTokenExpiresAt: tokenExpiresAt,
           };
         } catch {
           return false;
@@ -54,8 +60,10 @@ const authOptions: NextAuthOptions = {
     },
     jwt: async ({ token, user }) => {
       if ((user as AuthUser)?.apiUser) {
-        (token as AuthUser).apiUser = (user as AuthUser).apiUser;
+        (token as AuthJWT).apiUser = (user as AuthUser).apiUser;
+        (token as AuthJWT).apiAccessTokenInfo = (user as AuthUser).apiTokenInfo;
       }
+
       return token as AuthJWT;
     },
 
@@ -66,9 +74,13 @@ const authOptions: NextAuthOptions = {
       session: AuthSession;
       token: AuthJWT;
     }) => {
-      if ((token as AuthUser).apiUser) {
-        (session as AuthUser).apiUser = (token as AuthUser).apiUser;
+      const tokenUser = (token as AuthJWT).apiUser;
+      const tokenApiAccessTokenInfo = (token as AuthJWT).apiAccessTokenInfo;
+      if (tokenUser) {
+        (session as AuthSession).apiUser = tokenUser;
+        (session as AuthSession).apiTokenInfo = tokenApiAccessTokenInfo;
       }
+
       return session;
     },
   },

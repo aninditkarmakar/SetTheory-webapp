@@ -1,21 +1,25 @@
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
+"use client";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 
-import React from "react"
-import { Playlists } from "../components/Playlist"
-import { Tracks } from "../components/Track"
-import { Separator } from "@/components/ui/separator"
-import ProfileInteraction from "./ProfileInteraction"
+import React from "react";
+import { Playlists } from "../components/Playlist";
+import { Tracks } from "../components/Track";
+import { Separator } from "@/components/ui/separator";
+import ProfileInteraction from "./ProfileInteraction";
+import { useSession } from "next-auth/react";
+import { ApiUser, AuthSession } from "../types/Auth.types";
 
-async function fetchUserData() {
-  // Dummy API
-  const userData = await fetch("https://jsonplaceholder.typicode.com/users/4")
-  // Can specify cache: no=store to prevent caching and will force fetch on every req.
-  const data = userData.json()
-  return data
-}
+// async function fetchUserData() {
+//   // Dummy API
+//   const userData = await fetch("https://jsonplaceholder.typicode.com/users/4");
+//   // Can specify cache: no=store to prevent caching and will force fetch on every req.
+//   const data = userData.json();
+//   return data;
+// }
 
-export default async function Profile() {
+export default function Profile() {
+  const session = useSession() as { data: AuthSession | null };
   // Sample data
   const pinnedPlaylistsData = [
     {
@@ -28,7 +32,7 @@ export default async function Profile() {
       name: "Chill Time with bros Tracks",
       tags: ["Trance", "Techno", "Hardstyle"],
     },
-  ]
+  ];
 
   const pinnedTracksData = [
     {
@@ -42,10 +46,9 @@ export default async function Profile() {
       tags: ["Trance", "Techno"],
     },
     { id: "track-3", name: "Track #3 - Epic Breakdown", tags: ["Hardstyle"] },
-  ]
+  ];
 
-  const user = await fetchUserData()
-  console.log("User data in Profile component:", user)
+  console.log("User data in Profile component:", session.data?.apiUser);
 
   return (
     <div className="container mx-auto relative p-4 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
@@ -58,9 +61,11 @@ export default async function Profile() {
         </div>
 
         <div className="w-3/4 p-4">
-          <h1 className="text-4xl font-bold">{user.name}</h1>
-          <h2 className="text-2xl">@{user.username}</h2>
-          <h3 className="text-2xl">{user.email}</h3>
+          <h1 className="text-4xl font-bold">
+            {session.data?.apiUser?.first_name}
+          </h1>
+          <h2 className="text-2xl">No username</h2>
+          <h3 className="text-2xl">{session.data?.apiUser?.email}</h3>
           <div className="pt-2 items-left gap-2 flex">
             <Badge variant="secondary">Trance</Badge>
             <Badge variant="secondary">Techno</Badge>
@@ -69,7 +74,11 @@ export default async function Profile() {
 
           <div>
             {/* Client component because need user interactivity.  */}
-            <ProfileInteraction initialUser={user} />
+            {session.data?.apiUser && (
+              <ProfileInteraction
+                initialUser={session.data?.apiUser as unknown as ApiUser}
+              />
+            )}
             {/* <Button>
               <Pencil />
               Edit Profile
@@ -94,5 +103,5 @@ export default async function Profile() {
         </div>
       </div>
     </div>
-  )
+  );
 }

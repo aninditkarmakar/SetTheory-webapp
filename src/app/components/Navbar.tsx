@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   NavigationMenu,
@@ -8,13 +8,22 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle, // For styling the trigger
-} from "@/components/ui/navigation-menu"
+} from "@/components/ui/navigation-menu";
 
-import Link from "next/link"
-import SearchBar from "./SearchBar"
-import { ModeToggle } from "@/components/mode-toggle"
+import Link from "next/link";
+import SearchBar from "./SearchBar";
+import { ModeToggle } from "@/components/mode-toggle";
+import { Button } from "@/components/ui/button";
+import { signOut, useSession } from "next-auth/react";
 
 export function Navbar() {
+  const { data: session } = useSession();
+
+  // No navbar if not authenticated
+  if (session === null) {
+    return null;
+  }
+
   return (
     <NavigationMenu viewport={false} className="z-50">
       <NavigationMenuList>
@@ -27,6 +36,16 @@ export function Navbar() {
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
             <Link href="/profile">Profile</Link>
           </NavigationMenuLink>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuItem asChild className={navigationMenuTriggerStyle()}>
+            <Button
+              className={"text-primary"}
+              onClick={() => signOut({ callbackUrl: "/" })}
+            >
+              Sign Out
+            </Button>
+          </NavigationMenuItem>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <SearchBar />
@@ -60,5 +79,5 @@ export function Navbar() {
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
-  )
+  );
 }

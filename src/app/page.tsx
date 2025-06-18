@@ -13,7 +13,7 @@ export default function Home() {
   }, [session]);
 
   const handleSignIn = () => {
-    void signIn("google", { callbackUrl: "/after-sign-in" });
+    void signIn("google", { callbackUrl: "/profile" });
   };
 
   return (

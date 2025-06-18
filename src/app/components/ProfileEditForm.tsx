@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 interface UserData {
-  id: number
-  name: string
-  username: string
-  email: string
+  user_id: string;
+  first_name: string;
+  email: string;
+  username?: string;
 }
 
 interface ProfileEditFormProps {
-  onCancel: () => void
+  onCancel: () => void;
   // Can add more properties later.
-  initialUser: UserData
+  initialUser: UserData;
 }
 
 export function ProfileEditForm({
@@ -25,12 +25,12 @@ export function ProfileEditForm({
 }: ProfileEditFormProps) {
   // Dummy form. Can handle using server actions as well maybe?
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    alert("Form submitted! (No actual data sent)")
+    e.preventDefault();
+    alert("Form submitted! (No actual data sent)");
     //
-  }
+  };
 
-  console.log("??? Initial Profile Data:", initialUser)
+  console.log("??? Initial Profile Data:", initialUser);
 
   return (
     <form
@@ -62,7 +62,7 @@ export function ProfileEditForm({
           <Input
             id="displayName"
             placeholder="Display Name"
-            value={initialUser.name}
+            value={initialUser.first_name}
           />
         </div>
 
@@ -120,5 +120,5 @@ export function ProfileEditForm({
         <Button type="submit">Save Changes</Button>
       </div>
     </form>
-  )
+  );
 }

@@ -1,29 +1,29 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Pencil } from "lucide-react"
-import { ProfileEditModal } from "../components/ProfileEditModal"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Pencil } from "lucide-react";
+import { ProfileEditModal } from "../components/ProfileEditModal";
 
 // Temp for now. and move to types later
 interface UserData {
-  id: number
-  name: string
-  username: string
-  email: string
+  user_id: string;
+  first_name: string;
+  email: string;
+  username?: string;
 }
 
 interface ProfileInteractionProps {
-  initialUser: UserData // This is the current users data.
+  initialUser: UserData; // This is the current users data.
 }
 
 export default function ProfileInteraction({
   initialUser,
 }: ProfileInteractionProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [currentUser, setCurrentUser] = useState<UserData>(initialUser)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentUser] = useState<UserData>(initialUser);
 
-  console.log("Current user in ProfileInteraction:", currentUser)
+  console.log("Current user in ProfileInteraction:", currentUser);
 
   // Need to handle actual POST here or using server actions.
   //   const handleProfileUpdated = (updatedData: UserData) => {
@@ -49,5 +49,5 @@ export default function ProfileInteraction({
         // onProfileUpdated={handleProfileUpdated}
       />
     </div>
-  )
+  );
 }

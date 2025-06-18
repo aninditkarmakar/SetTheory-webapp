@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Dialog,
@@ -6,22 +6,22 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 
 // Need to learn better form handling.
-import { ProfileEditForm } from "./ProfileEditForm"
+import { ProfileEditForm } from "./ProfileEditForm";
 
 interface UserData {
-  id: number
-  name: string
-  username: string
-  email: string
+  user_id: string;
+  first_name: string;
+  email: string;
+  username?: string;
 }
 
 interface ProfileEditModalProps {
-  initialUser: UserData
-  isOpen: boolean
-  onOpenChange: (open: boolean) => void
+  initialUser: UserData;
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 export function ProfileEditModal({
   isOpen,
@@ -29,10 +29,10 @@ export function ProfileEditModal({
   initialUser,
 }: ProfileEditModalProps) {
   const handleCancel = () => {
-    onOpenChange(false) // Close modal on cancel
-  }
+    onOpenChange(false); // Close modal on cancel
+  };
 
-  console.log(">>>>> ProfileEditModal isOpen:", initialUser)
+  console.log(">>>>> ProfileEditModal isOpen:", initialUser);
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -45,5 +45,5 @@ export function ProfileEditModal({
         <ProfileEditForm onCancel={handleCancel} initialUser={initialUser} />
       </DialogContent>
     </Dialog>
-  )
+  );
 }
